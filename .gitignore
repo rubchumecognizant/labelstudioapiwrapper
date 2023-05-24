@@ -3,3 +3,4 @@
 *.dll
 projects.json
 .ipynb_checkpoints
+credentials*

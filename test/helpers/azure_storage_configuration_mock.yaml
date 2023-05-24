@@ -1,5 +1,5 @@
 label-studio:
-  host: http://localhost:8080
+  host: localhost
   port: 8080
   api-token: api token
   project-id: 1234

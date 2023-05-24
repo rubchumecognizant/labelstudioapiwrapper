@@ -1,4 +1,4 @@
-from unittest import TestCase
+from unittest import TestCase, mock
 from unittest.mock import patch, call
 
 from src.label_studio_api import LabelStudioApi
@@ -81,20 +81,24 @@ class StorageConnectionsTests(TestCase):
             }
         )
 
-    @patch.object(LabelStudioInstance, "create_target_azure_storage_connection")
-    @patch.object(LabelStudioInstance, "create_source_azure_storage_connection")
+    # @patch.object(LabelStudioInstance, "create_target_azure_storage_connection")
+    # @patch.object(LabelStudioInstance, "create_source_azure_storage_connection")
+    @patch("src.label_studio_api.LabelStudioInstance", autospec=True)
     def test_create_storage_connections_from_configuration_file(
             self,
-            create_source_azure_storage_connection_mock,
-            create_target_azure_storage_connection_mock,
+            LabelStudioInstanceMock,
     ):
+        # Given
+        label_studio_instance = mock.MagicMock()
+        LabelStudioInstanceMock.return_value = label_studio_instance
         # When
         LabelStudioApi.create_azure_storage_connections_from_configuration_file(
-            configuration_file="test/helpers/azure_storage_configuration.yaml"
+            configuration_file="test/helpers/azure_storage_configuration_mock.yaml"
         )
         # Then
-        self.assertEqual(create_source_azure_storage_connection_mock.call_count, 2)
-        create_source_azure_storage_connection_mock.assert_has_calls([
+        LabelStudioInstanceMock.assert_called_once_with("localhost", 8080, "api token")
+        self.assertEqual(label_studio_instance.create_source_azure_storage_connection.call_count, 2)
+        label_studio_instance.create_source_azure_storage_connection.assert_has_calls([
             call(
                 project_id=1234,
                 connection_name="connection name",
@@ -115,7 +119,7 @@ class StorageConnectionsTests(TestCase):
             )
         ])
 
-        create_target_azure_storage_connection_mock.assert_called_once_with(
+        label_studio_instance.create_target_azure_storage_connection.assert_called_once_with(
             project_id=1234,
             connection_name="target connection",
             description="connection description",
