@@ -2,19 +2,20 @@ from unittest import TestCase
 from unittest.mock import patch, call
 
 from src.label_studio_api import LabelStudioApi
+from src.label_studio_instance import LabelStudioInstance
 
 
 class StorageConnectionsTests(TestCase):
     @patch("requests.post")
     def test_create_source_storage_connection(self, post_mock):
         # Given
-        label_studio_api = LabelStudioApi(
+        label_studio_instance = LabelStudioInstance(
             host="label_studio_host",
             port="label_studio_port",
             api_token="label_studio_api_token",
         )
         # When
-        label_studio_api.create_source_azure_storage_connection(
+        label_studio_instance.create_source_azure_storage_connection(
             project_id=1234,
             connection_name="connection name",
             description="connection description",
@@ -46,13 +47,13 @@ class StorageConnectionsTests(TestCase):
     @patch("requests.post")
     def test_create_target_storage_connection(self, post_mock):
         # Given
-        label_studio_api = LabelStudioApi(
+        label_studio_instance = LabelStudioInstance(
             host="label_studio_host",
             port="label_studio_port",
             api_token="label_studio_api_token",
         )
         # When
-        label_studio_api.create_target_azure_storage_connection(
+        label_studio_instance.create_target_azure_storage_connection(
             project_id=1234,
             connection_name="connection name",
             description="connection description",
@@ -80,21 +81,15 @@ class StorageConnectionsTests(TestCase):
             }
         )
 
-    @patch("src.label_studio_api.LabelStudioApi.create_target_azure_storage_connection")
-    @patch("src.label_studio_api.LabelStudioApi.create_source_azure_storage_connection")
+    @patch.object(LabelStudioInstance, "create_target_azure_storage_connection")
+    @patch.object(LabelStudioInstance, "create_source_azure_storage_connection")
     def test_create_storage_connections_from_configuration_file(
             self,
             create_source_azure_storage_connection_mock,
             create_target_azure_storage_connection_mock,
     ):
-        # Given
-        label_studio_api = LabelStudioApi(
-            host="label_studio_host",
-            port="label_studio_port",
-            api_token="label_studio_api_token",
-        )
         # When
-        label_studio_api.create_azure_storage_connections_from_configuration_file(
+        LabelStudioApi.create_azure_storage_connections_from_configuration_file(
             configuration_file="test/helpers/azure_storage_configuration.yaml"
         )
         # Then
