@@ -2,3 +2,4 @@
 *.def
 *.dll
 projects.json
+.ipynb_checkpoints
