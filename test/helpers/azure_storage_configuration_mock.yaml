@@ -1,0 +1,30 @@
+label-studio:
+  host: localhost
+  port: 8080
+  api-token: api token
+  project-id: 1234
+
+connections:
+  source:
+    - name: connection name
+      description: connection description
+      azure-storage:
+        account-name: storage account name
+        account-key: storage account key
+        container: container_name
+        prefix: source/folder
+    - name: another connection
+      description: connection description
+      azure-storage:
+        account-name: storage account name
+        account-key: storage account key
+        container: another container_name
+        prefix: source/folder
+  target:
+    - name: target connection
+      description: connection description
+      azure-storage:
+        account-name: storage account name
+        account-key: storage account key
+        container: container_name
+        prefix: destination/folder
