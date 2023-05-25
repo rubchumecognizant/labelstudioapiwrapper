@@ -1,14 +1,16 @@
 [tool.poetry]
-name = "cognizantmlops"
+name = "label_studio_api_wrapper"
 version = "0.1.0"
 description = ""
 authors = ["Rubén Chuliá Mena <rubchume@gmail.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+create-connections = 'src.label_studio_api_wrapper:create_connections'
+
 [tool.poetry.dependencies]
 python = "^3.8"
 pyyaml = "^6.0"
-
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.3.1"
